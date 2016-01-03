@@ -5,7 +5,6 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [org.clojure/data.json "0.2.6"]
-                 [snipsnap "0.1.0" :exclusions [org.clojure/clojure]]
                  [org.clojure/tools.cli "0.3.3"]]
   :main ^:skip-aot cloom.core
   :target-path "target/%s"
