@@ -52,7 +52,6 @@
 (defn process-complex
   "Processes other inputs based on how many arguments are provided"
   [args]
-  (println "Received args" args)
   (case (count args)
     1 (let [item (apply storage/find-item-or-group args)]
         (when (nil? item)
