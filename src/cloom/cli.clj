@@ -52,27 +52,29 @@
 (defn process-complex
   "Processes other inputs based on how many arguments are provided"
   [args]
-  (case (count args)
-    1 (let [item (apply storage/find-item-or-group args)]
-        (when (nil? item)
-          (println "Cloom could not find a group or item named" (color/style (args 0)))
-          (System/exit 1))
-        (display-or-copy-item item))
-    2 (let [item (apply storage/find-item (+ '((storage/load-data)) args))]
-        (when (nil? item)
-          (println "Cloom could not find a group named"
-                   (color/style (args 0) :magenta)
-                   "or an item named"
-                   (color/style (args 1) :magenta) "in that group.")
-          (System/exit 1)
-          )
-        (display-or-copy-item item))
-    3 (do
-        (storage/save-data (apply storage/update-or-add-item args))
-        (println (apply #(str (color/style "Cloom!" :cyan) " " %2 " in " %1 " is " %3 ". Got it.")
-                        (map #(color/style % :magenta) args))))
-    :default (do
-               (println "Hold on. There's something wrong with your input. Use cloom help for further information."))))
+  (let [argcount (count args)]
+    (cond
+      (= argcount 1) (let [item (apply storage/find-item-or-group args)]
+              (when (nil? item)
+                (println "Cloom could not find a group or item named" (color/style (first args)))
+                (System/exit 1))
+              (display-or-copy-item item))
+      (= argcount 2) (let [item (apply storage/find-item (concat (list (storage/load-data)) args))]
+                       (when (nil? item)
+                         (println "Cloom could not find a group named"
+                                  (color/style (first args) :magenta)
+                                  "or an item named"
+                                  (color/style (second args) :magenta) "in that group.")
+                         (System/exit 1)
+                         )
+                       (display-or-copy-item item))
+      (= argcount 3) (do
+                       (storage/save-data (apply storage/update-or-add-item args))
+                       (println (apply #(str (color/style "Cloom!" :cyan) " " %2 " in " %1 " is " %3 ". Got it.")
+                                       (map #(color/style % :magenta) args))))
+      :else (do
+              (println "Hold on. There's something wrong with your input. Use cloom help for further information.")
+              (System/exit 1)))))
 
 (defn- do-echo-item
   "Processes a resulting query to the datafile and echoes the result or prints
