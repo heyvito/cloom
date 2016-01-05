@@ -5,7 +5,7 @@
   (:require [clojure.string :as string])
   (:require [cloom.util :as util]
             [clojure.string :as str])
-  (:import (clojure.lang PersistentArrayMap)))
+  (:import (clojure.lang PersistentHashMap)))
 
 (defn remove-item!
   "Removes a specific item from the datafile"
@@ -45,7 +45,7 @@
     (clipboard/set-content item)
     (println (color/style "Cloom!" :cyan) "Copied" (color/style item :magenta) "to your clipboard.")
     (System/exit 0))
-  (when (instance? PersistentArrayMap item)
+  (when (instance? PersistentHashMap item)
     (util/tabulate 4 item)
     (System/exit 0)))
 
